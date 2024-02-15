@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-OPC5-BlogApp-7a7f65d7-4c4b-4847-8950-d7ae774ac48b</UserSecretsId>
+    <UserSecretsId>aspnet-OPC5-BlogApp-dca1ead4-d56b-44cb-a9ac-ca0e49891e00</UserSecretsId>
     <RootNamespace>OPC5-BlogApp</RootNamespace>
     <AssemblyName>$(AssemblyName.Replace(' ', '_'))</AssemblyName>
   </PropertyGroup>
