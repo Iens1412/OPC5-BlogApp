@@ -16,7 +16,7 @@ namespace Services.Users
 
         public User? GetUserByUsername(string username)
         {
-            User? fetchedUser = context.Users.Single(u => u.Username == username);
+            User? fetchedUser = context.Users.FirstOrDefault(u => u.Username == username);
 
             return fetchedUser;
         }

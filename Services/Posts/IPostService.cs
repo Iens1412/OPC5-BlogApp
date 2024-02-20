@@ -7,5 +7,6 @@ namespace Services.Posts
         void AddPost(Post post);
         List<Post> GetPosts();
         List<Comment> GetPostComments(int postId);
+        Post? AddPostUpvote(int postId);
     }
 }

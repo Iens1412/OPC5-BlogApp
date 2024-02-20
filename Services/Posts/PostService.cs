@@ -22,13 +22,29 @@ namespace Services.Posts
 
         public List<Comment> GetPostComments(int postId)
         {
-            Post post = context.Posts.Single(p => p.PostId == postId);
+            Post? post = context.Posts.FirstOrDefault(p => p.PostId == postId);
 
             if (post == null) return new List<Comment>();
 
             List<Comment> postComments = post.PostComments.ToList();
 
             return postComments;
+        }
+
+        public Post? AddPostUpvote(int postId)
+        {
+            Post? foundPost = context.Posts.FirstOrDefault(p => p.PostId == postId);
+
+            if (foundPost != null)
+            {
+                foundPost.PostUpvotes += 1;
+
+                context.SaveChanges();
+
+                return foundPost;
+            }
+
+            return foundPost;
         }
     }
 }
