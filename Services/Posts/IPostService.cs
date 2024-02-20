@@ -5,5 +5,6 @@ namespace Services.Posts
     public interface IPostService
     {
         void AddPost(Post post);
+        List<Post> GetPosts();
     }
 }

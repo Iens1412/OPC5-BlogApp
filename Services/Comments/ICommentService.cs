@@ -5,5 +5,7 @@ namespace Services.Posts
     public interface ICommentService
     {
         void AddComment(Comment comment);
+
+        List<Comment> GetComments();
     }
 }
