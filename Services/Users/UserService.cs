@@ -5,14 +5,15 @@ using OPC5_BlogApp.Data.Models;
 
 namespace Services.Users
 {
-    public class UserService(ApplicationDbContext context) : IUserService
+    public class UserService(ApplicationDbContext _context) : IUserService
     {
-        private readonly ApplicationDbContext _context = context;
+        private readonly ApplicationDbContext context = _context;
 
         public void AddUser(User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            //HASH USER IN HERE?
+            context.Users.Add(user);
+            context.SaveChanges();
         }
     }
 }

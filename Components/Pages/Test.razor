@@ -11,14 +11,20 @@
 
 <button class="btn btn-primary" @onclick="HandleClick">Click to Create</button>
 
+@if (added) {
+    <div>Added: @user.Username</div>
+}
+
 @code {
     private User user = new User() { Email = "Test@hotmail.com", Hashed = "$AGX123_HASHED", UserId = 1, Username = "TestAccount" };
+    private bool added = false;
 
     private void HandleClick()
     {
 
         Console.WriteLine("Debug, handled submit!");
 
+        added = true;
         userService.AddUser(user);
     }
 }
