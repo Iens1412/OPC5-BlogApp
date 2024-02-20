@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OPC5_BlogApp.Data;
 using OPC5_BlogApp.Data.Models;
 
-namespace OPC5_BlogApp.Services
+namespace Services.Users
 {
     public class UserService : IUserService
     {

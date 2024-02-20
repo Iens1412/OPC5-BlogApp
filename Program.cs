@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OPC5_BlogApp.Components;
 using OPC5_BlogApp.Components.Account;
 using OPC5_BlogApp.Data;
-using OPC5_BlogApp.Services;
+using Services.Users;
 
 namespace OPC5_BlogApp
 {
