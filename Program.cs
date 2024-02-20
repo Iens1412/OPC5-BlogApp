@@ -45,6 +45,7 @@ namespace OPC5_BlogApp
 
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IPostService, PostService>();
+            builder.Services.AddTransient<ICommentService, CommentService>();
 
             var app = builder.Build();
 
