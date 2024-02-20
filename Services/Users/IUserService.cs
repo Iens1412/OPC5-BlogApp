@@ -7,5 +7,6 @@ namespace Services.Users
     public interface IUserService
     {
         void AddUser(User user);
+        User? GetUserByUsername(string username);
     }
 }

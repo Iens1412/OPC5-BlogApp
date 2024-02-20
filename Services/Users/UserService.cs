@@ -13,5 +13,12 @@ namespace Services.Users
             context.Users.Add(user);
             context.SaveChanges();
         }
+
+        public User? GetUserByUsername(string username)
+        {
+            User? fetchedUser = context.Users.Single(u => u.Username == username);
+
+            return fetchedUser;
+        }
     }
 }
