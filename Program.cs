@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OPC5_BlogApp.Components;
 using OPC5_BlogApp.Components.Account;
 using OPC5_BlogApp.Data;
+using OPC5_BlogApp.Services;
 
 namespace OPC5_BlogApp
 {
@@ -30,7 +31,7 @@ namespace OPC5_BlogApp
                 .AddIdentityCookies();
 
             var connectionString = builder.Configuration.GetConnectionString("ConnectionString") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            builder.Services.AddDbContext<ApplicationDbContext>((DbContextOptionsBuilder options) =>
                 options.UseMySQL(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -40,6 +41,7 @@ namespace OPC5_BlogApp
                 .AddDefaultTokenProviders();
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+            builder.Services.AddTransient<IUserService, UserService>();
 
             var app = builder.Build();
 

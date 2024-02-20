@@ -1,0 +1,23 @@
+﻿@page "/test"
+@using OPC5_BlogApp.Services
+@using OPC5_BlogApp.Data.Models;
+@inject IUserService userService
+@rendermode InteractiveServer
+
+<PageTitle>Test Page</PageTitle>
+
+<h3>Test</h3>
+
+<button class="btn btn-primary" @onclick="HandleClick">Click to Create</button>
+
+@code {
+    private User user = new User() { Email = "Test@hotmail.com", Hashed = "$AGX123_HASHED", UserId = 1, Username = "TestAccount" };
+
+    private void HandleClick()
+    {
+
+        Console.WriteLine("Debug, handled submit!");
+
+        userService.AddUser(user);
+    }
+}

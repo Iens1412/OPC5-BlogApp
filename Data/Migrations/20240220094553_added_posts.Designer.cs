@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OPC5_BlogApp.Data;
 
@@ -10,9 +11,11 @@ using OPC5_BlogApp.Data;
 namespace OPC5_BlogApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240220094553_added_posts")]
+    partial class added_posts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace OPC5_BlogApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Post");
                 });
 
             modelBuilder.Entity("OPC5_BlogApp.Data.Models.User", b =>
@@ -65,13 +68,13 @@ namespace OPC5_BlogApp.Migrations
             modelBuilder.Entity("OPC5_BlogApp.Data.Models.Post", b =>
                 {
                     b.HasOne("OPC5_BlogApp.Data.Models.User", null)
-                        .WithMany("Posts")
+                        .WithMany("posts")
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("OPC5_BlogApp.Data.Models.User", b =>
                 {
-                    b.Navigation("Posts");
+                    b.Navigation("posts");
                 });
 #pragma warning restore 612, 618
         }
