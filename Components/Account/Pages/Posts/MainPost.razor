@@ -1,0 +1,80 @@
+﻿@page "/Posts/MainPost"
+@using System.ComponentModel.DataAnnotations
+@using System.ComponentModel.DataAnnotations.Schema
+
+<PageTitle>Post</PageTitle>
+
+<form>
+    <div style="border:1px solid  red;border-radius:5px; padding:10px;">
+    <div class="form-group">
+        <label for="postContent">Post Content</label>
+        <textarea id="postContent" class="form-control" @bind="newPost.PostData" rows="3"></textarea>
+    </div>
+
+    <button type="button" class="btn btn-primary" @onclick="AddUpvote">Upvote</button>
+    <button type="button" class="btn btn-warning" @onclick="AddDownvote">Downvote</button>
+    <button type="submit" class="btn btn-success" @onclick="HandlePost">Post</button>
+    <br /><br />
+    <p role="status">Upvotes: @newPost.PostUpvotes</p>
+    <p role="status">Downvotes: @newPost.PostDownvotes</p>
+    </div>
+</form>
+
+@code {
+    public class User
+    {
+        [Key]
+        [Required]
+        public int UserId { get; set; }
+        public string Username { get; set; }
+        public string Hashed { get; set; }
+        public string Email { get; set; }
+        public Post[]? Posts { get; set; }
+    }
+    public class Post
+    {
+        [Key]
+        [Required]
+        public int PostId { get; set; }
+        public string PostData { get; set; } // Innehållet i inlägget
+        public int PostUpvotes { get; set; }
+        public int PostDownvotes { get; set; }
+        //public Tag[]? PostTags { get; set; }
+        //public Comment[]? PostComments { get; set; }
+    }
+    private User currentUser = new User();
+    private Post newPost = new Post();
+
+    private void HandlePost()
+    {
+        newPost.PostUpvotes = 0; // init upvotes
+        newPost.PostDownvotes = 0; // init downvotes
+
+        // Adda nya inlägget i den aktuella användarens postlista
+        var postsList = currentUser.Posts?.ToList() ?? new List<Post>();
+        postsList.Add(newPost);
+        currentUser.Posts = postsList.ToArray();
+
+        // Här skulle du spara den uppdaterade användaren (med det nya inlägget) i din databas
+
+
+        // Återställ newPost för nästa inlägg
+        newPost = new Post();
+    }
+    private void AddUpvote()
+    {
+        newPost.PostUpvotes++;
+    }
+
+    private void AddDownvote()
+    {
+        newPost.PostDownvotes++;
+    }
+
+    //Metod som gör att det återställs till nästa inlägg
+    private void ResetPost()
+    {
+        newPost = new Post() { PostUpvotes = 0, PostDownvotes = 0 };
+    }
+}
+
