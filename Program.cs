@@ -5,6 +5,7 @@ using OPC5_BlogApp.Components;
 using OPC5_BlogApp.Components.Account;
 using OPC5_BlogApp.Data;
 using Services.Posts;
+using Services.Tags;
 using Services.Users;
 
 namespace OPC5_BlogApp
@@ -46,6 +47,7 @@ namespace OPC5_BlogApp
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IPostService, PostService>();
             builder.Services.AddTransient<ICommentService, CommentService>();
+            builder.Services.AddTransient<ITagService, TagService>();
 
             var app = builder.Build();
 
