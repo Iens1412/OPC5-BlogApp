@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OPC5_BlogApp.Components;
 using OPC5_BlogApp.Components.Account;
 using OPC5_BlogApp.Data;
+using Services.Posts;
 using Services.Users;
 
 namespace OPC5_BlogApp
@@ -41,7 +42,9 @@ namespace OPC5_BlogApp
                 .AddDefaultTokenProviders();
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IPostService, PostService>();
 
             var app = builder.Build();
 

@@ -1,6 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using OPC5_BlogApp.Data;
+﻿using OPC5_BlogApp.Data;
 using OPC5_BlogApp.Data.Models;
 
 namespace Services.Users
