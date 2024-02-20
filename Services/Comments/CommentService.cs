@@ -12,5 +12,12 @@ namespace Services.Posts
             context.Comments.Add(comment);
             context.SaveChanges();
         }
+
+        public List<Comment> GetComments()
+        {
+            List<Comment> allComments = context.Comments.ToList();
+
+            return allComments;
+        }
     }
 }

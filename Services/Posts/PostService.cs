@@ -12,5 +12,12 @@ namespace Services.Posts
             context.Posts.Add(post);
             context.SaveChanges();
         }
+
+        public List<Post> GetPosts()
+        {
+            List<Post> allPosts = context.Posts.ToList();
+
+            return allPosts;
+        }
     }
 }
