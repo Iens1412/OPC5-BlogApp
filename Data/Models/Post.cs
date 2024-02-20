@@ -5,9 +5,13 @@ namespace OPC5_BlogApp.Data.Models
     public class Post
     {
         [Key]
+        [Required]
         public int PostId { get; set; }
 
         public string PostData { get; set; }
-        public string[] PostTags { get; set; }
+        public int PostUpvotes { get; set; }
+        public int PostDownvotes { get; set; }
+        public Tag[] PostTags { get; set; }
+        public Comment[] PostComments { get; set; }
     }
 }

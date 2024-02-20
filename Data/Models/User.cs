@@ -6,7 +6,9 @@ namespace OPC5_BlogApp.Data.Models
     
     {
         [Key]
+        [Required]
         public int UserId { get; set; }
+
         public string Username { get; set; }
         public string Hashed { get; set; }
         public string Email { get; set; }
