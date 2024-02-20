@@ -19,5 +19,16 @@ namespace Services.Posts
 
             return allPosts;
         }
+
+        public List<Comment> GetPostComments(int postId)
+        {
+            Post post = context.Posts.Single(p => p.PostId == postId);
+
+            if (post == null) return new List<Comment>();
+
+            List<Comment> postComments = post.PostComments.ToList();
+
+            return postComments;
+        }
     }
 }
