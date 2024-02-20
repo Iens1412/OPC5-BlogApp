@@ -13,6 +13,38 @@ namespace Services.Posts
             context.SaveChanges();
         }
 
+        public Post? AddPostUpvote(int postId)
+        {
+            Post? foundPost = context.Posts.FirstOrDefault(p => p.PostId == postId);
+
+            if (foundPost != null)
+            {
+                foundPost.PostUpvotes += 1;
+
+                context.SaveChanges();
+
+                return foundPost;
+            }
+
+            return foundPost;
+        }
+
+        public Post? AddPostDownvote(int postId)
+        {
+            Post? foundPost = context.Posts.FirstOrDefault(p => p.PostId == postId);
+
+            if (foundPost != null)
+            {
+                foundPost.PostDownvotes += 1;
+
+                context.SaveChanges();
+
+                return foundPost;
+            }
+
+            return foundPost;
+        }
+
         public List<Post> GetPosts()
         {
             List<Post> allPosts = context.Posts.ToList();
@@ -31,13 +63,29 @@ namespace Services.Posts
             return postComments;
         }
 
-        public Post? AddPostUpvote(int postId)
+        public Post? RemovePostUpvote(int postId)
         {
             Post? foundPost = context.Posts.FirstOrDefault(p => p.PostId == postId);
 
             if (foundPost != null)
             {
-                foundPost.PostUpvotes += 1;
+                foundPost.PostUpvotes -= 1;
+
+                context.SaveChanges();
+
+                return foundPost;
+            }
+
+            return foundPost;
+        }
+
+        public Post? RemovePostDownvote(int postId)
+        {
+            Post? foundPost = context.Posts.FirstOrDefault(p => p.PostId == postId);
+
+            if (foundPost != null)
+            {
+                foundPost.PostDownvotes -= 1;
 
                 context.SaveChanges();
 

@@ -5,8 +5,11 @@ namespace Services.Posts
     public interface IPostService
     {
         void AddPost(Post post);
+        Post? AddPostUpvote(int postId);
+        Post? AddPostDownvote(int postId);
         List<Post> GetPosts();
         List<Comment> GetPostComments(int postId);
-        Post? AddPostUpvote(int postId);
+        Post? RemovePostUpvote(int postId);
+        Post? RemovePostDownvote(int postId);
     }
 }
