@@ -1,0 +1,35 @@
+﻿@page "/Post/PostComponent"
+@using Services.Users
+@using Services.Posts
+@using OPC5_BlogApp.Data.Models
+@using System.ComponentModel.DataAnnotations
+@using System.ComponentModel.DataAnnotations.Schema
+@inject IUserService userService
+@inject IPostService postService
+@rendermode InteractiveServer
+
+<PageTitle>Post</PageTitle>
+
+<form>
+    <div style="border:1px solid  darkgray;border-radius:5px; padding:10px;">
+        <div class="form-group">
+            <label for="postContent">Post Content</label>
+            <textarea id="postContent" class="form-control" @bind="newPost.PostData" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success" @onclick="HandlePost">Post</button>
+
+    </div>
+</form>
+
+@code {
+    private User currentUser = new User();
+    private Post newPost = new Post();
+
+    private void HandlePost()
+    {
+        postService.AddPost(newPost);
+        newPost = new Post();
+    }
+}
+
