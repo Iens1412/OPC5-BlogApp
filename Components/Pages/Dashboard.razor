@@ -2,11 +2,36 @@
 @using Services.Posts
 @using OPC5_BlogApp.Data.Models
 @inject IPostService postService;
+@inject NavigationManager navigation;
 @rendermode InteractiveServer
 
 <div class="dashboard-container">
     <!--Loop posts and display them one by one-->
-    <div class="dashboard-post">
+    @if (posts == null)
+    {
+        <p>Loading posts...</p>
+    }
+    else
+    {
+        @foreach (var post in posts)
+        {
+            <div class="dashboard-post" id="@post.PostId">
+                <div class="username">
+                    <span>PostUser</span>
+                </div>
+                <div class="post">
+                    <p style="margin-left: 5px;">@post.PostData</p>
+                </div>
+                <div class="footer">
+                    <i @onclick="() => CommentPost(post)" class="fa fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
+                    <i @onclick="() => UpvotePost(post)" class="fas fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
+                    <i @onclick="() => DownvotePost(post)" class="fas fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
+                </div>
+            </div>
+        }
+    }
+    <!--Loop posts and display them one by one-->
+    <!--<div class="dashboard-post">
         <div class="username">
             <span>Username</span>
         </div>
@@ -32,17 +57,17 @@
             <i class="fas fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">0</span></i>
             <i class="fas fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">0</span></i>
         </div>
-    </div>
-    <!--Loop posts and display them one by one-->
+    </div>-->
 </div>
 
 <style>
-    /*body {
-        background-color: black; (CHANGE BACKGROUND LATER?)
-    }*/
+    body {
+        background-color: #212121;
+    }
 
     .dashboard-container {
         border-radius: 5px;
+        color: white;
 
         display: flex;
         flex-direction: column;
@@ -64,6 +89,10 @@
         align-items: center;
 
         margin-bottom: 15px;
+    }
+
+    .dashboard-post:hover {
+            background-color: #424242;
     }
 
     .dashboard-post .username {
@@ -116,18 +145,28 @@
 </style>
 
 @code {
+    private List<Post>? posts;
 
-    private void UpvotePost()
+    protected override async Task OnInitializedAsync()
     {
+        posts = await Task.Run(() => postService.GetPosts());
+    }
+
+    private async void UpvotePost(Post post)
+    {
+        await Task.Run(() => postService.AddPostUpvote(post.PostId));
+        navigation.NavigateTo(navigation.Uri, forceLoad: true);
         Console.WriteLine("Upvote on post!");
     }
 
-    private void DownvotePost()
+    private async void DownvotePost(Post post)
     {
+        await Task.Run(() => postService.AddPostDownvote(post.PostId));
+        navigation.NavigateTo(navigation.Uri, forceLoad: true);
         Console.WriteLine("Downvote on post!");
     }
 
-    private void CommentPost()
+    private void CommentPost(Post post)
     {
         Console.WriteLine("Comment on post!");
     }
