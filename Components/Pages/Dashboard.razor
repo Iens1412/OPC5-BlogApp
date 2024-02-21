@@ -1,8 +1,6 @@
 ﻿@page "/dashboard"
 @rendermode InteractiveServer
 
-<h3>Dashboard</h3>
-
 <div class="dashboard-container">
     <!--Loop posts and display them one by one-->
     <div class="dashboard-post">
@@ -11,6 +9,20 @@
         </div>
         <div class="post">
             <p style="margin-left: 5px;">First post</p>
+        </div>
+        <div class="footer">
+            <i @onclick="CommentPost" class="fa fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
+            <i @onclick="UpvotePost" class="fas fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">0</span></i>
+            <i @onclick="DownvotePost" class="fas fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">0</span></i>
+        </div>
+    </div>
+
+    <div class="dashboard-post">
+        <div class="username">
+            <span>Username</span>
+        </div>
+        <div class="post">
+            <p style="margin-left: 5px;">Second post</p>
         </div>
         <div class="footer">
             <i class="fa fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
@@ -22,6 +34,10 @@
 </div>
 
 <style>
+    /*body {
+        background-color: black; (CHANGE BACKGROUND LATER?)
+    }*/
+
     .dashboard-container {
         border-radius: 5px;
 
@@ -43,15 +59,18 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        margin-bottom: 15px;
     }
 
     .dashboard-post .username {
         margin: 1%;
         align-self: flex-start;
+        font-weight: bolder;
     }
 
     .dashboard-post .post {
-        border: solid 2px red; 
+        border: solid 2px red; /*DEBUG*/
         margin-left: 5%;
         margin-right: 5%;
         width: 85%;
@@ -95,4 +114,18 @@
 
 @code {
 
+    private void UpvotePost()
+    {
+        Console.WriteLine("Upvote on post!");
+    }
+
+    private void DownvotePost()
+    {
+        Console.WriteLine("Downvote on post!");
+    }
+
+    private void CommentPost()
+    {
+        Console.WriteLine("Comment on post!");
+    }
 }
