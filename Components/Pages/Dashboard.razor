@@ -1,10 +1,12 @@
 ﻿@page "/dashboard"
 @using Services.Posts
 @using OPC5_BlogApp.Data.Models
+@using OPC5_BlogApp.Components.Post;
 @inject IPostService postService;
 @rendermode InteractiveServer
 
 <div class="dashboard-container">
+    <PostComponent />
     <!--Loop posts and display them one by one-->
     @if (posts == null)
     {
@@ -18,9 +20,11 @@
                 <div class="username">
                     <span>PostUser</span>
                 </div>
+
                 <div class="post">
                     <p style="margin-left: 5px;">@post.PostData</p>
                 </div>
+
                 <div class="footer">
                     <i @onclick="() => CommentPost(post)" class="fa fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
                     <i @onclick="() => UpvotePost(post)" class="fas fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
@@ -100,7 +104,7 @@
     }
 
     .dashboard-post .post {
-        border: solid 2px red; /*DEBUG*/
+        /*border: solid 2px red;*/ /*DEBUG*/
         margin-left: 5%;
         margin-right: 5%;
         width: 85%;

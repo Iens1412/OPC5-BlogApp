@@ -1,5 +1,4 @@
-﻿@page "/Post/PostComponent"
-@using Services.Users
+﻿@using Services.Users
 @using Services.Posts
 @using OPC5_BlogApp.Data.Models
 @using System.ComponentModel.DataAnnotations
@@ -8,19 +7,28 @@
 @inject IPostService postService
 @rendermode InteractiveServer
 
-<PageTitle>Post</PageTitle>
-
-<form>
-    <div style="border:1px solid  darkgray;border-radius:5px; padding:10px;">
+<form class="dashboard-poster">
+    <div>
         <div class="form-group">
             <label for="postContent">Post Content</label>
             <textarea id="postContent" class="form-control" @bind="newPost.PostData" rows="3"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-success" @onclick="HandlePost">Post</button>
+        <button style="margin-top: 15px;" type="submit" class="btn btn-success" @onclick="HandlePost">Post</button>
 
     </div>
 </form>
+
+<style>
+    .dashboard-poster {
+        width: 100%;
+        background-color: #212121;
+        border: 1px solid white;
+        padding: 10px;
+
+        margin-bottom: 5%;
+    }
+</style>
 
 @code {
     private User currentUser = new User();
@@ -28,8 +36,18 @@
 
     private void HandlePost()
     {
+        if (newPost.PostData == null)
+        {
+            Console.WriteLine("Returning since no message was entered.");
+            StateHasChanged();
+
+            return;
+        }
+
         postService.AddPost(newPost);
         newPost = new Post();
+
+        StateHasChanged();
     }
 }
 
