@@ -2,7 +2,6 @@
 @using Services.Posts
 @using OPC5_BlogApp.Data.Models
 @inject IPostService postService;
-@inject NavigationManager navigation;
 @rendermode InteractiveServer
 
 <div class="dashboard-container">
@@ -154,14 +153,14 @@
     private async void UpvotePost(Post post)
     {
         await Task.Run(() => postService.AddPostUpvote(post.PostId));
-        navigation.NavigateTo(navigation.Uri, forceLoad: true);
+        StateHasChanged();
         Console.WriteLine("Upvote on post!");
     }
 
     private async void DownvotePost(Post post)
     {
         await Task.Run(() => postService.AddPostDownvote(post.PostId));
-        navigation.NavigateTo(navigation.Uri, forceLoad: true);
+        StateHasChanged();
     }
 
     private void CommentPost(Post post)
