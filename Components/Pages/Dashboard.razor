@@ -18,7 +18,11 @@
         {
             <div class="dashboard-post" id="@post.PostId">
                 <div class="username">
-                    <span>PostUser</span>
+                    <span>
+                        PostUser <span style="color: #424242;">
+                            &#64;PostUser · 20h
+                        </span>
+                    </span>
                 </div>
 
                 <div class="post">
@@ -26,9 +30,9 @@
                 </div>
 
                 <div class="footer">
-                    <i @onclick="() => CommentPost(post)" class="fa fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
-                    <i @onclick="() => UpvotePost(post)" class="fas fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
-                    <i @onclick="() => DownvotePost(post)" class="fas fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
+                    <i @onclick="() => CommentPost(post)" class="far fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
+                    <i @onclick="() => UpvotePost(post)" class="far fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
+                    <i @onclick="() => DownvotePost(post)" class="far fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
                 </div>
             </div>
         }
@@ -90,7 +94,12 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        font-size: 16px;
+    }
 
+    .dashboard-post:last-child {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
     }
 
     .dashboard-post:hover {
@@ -120,7 +129,7 @@
     }
 
     .dashboard-post .footer i {
-        margin-right: 30px;
+        margin-right: 50px;
         margin-bottom: 10px;
     }
 

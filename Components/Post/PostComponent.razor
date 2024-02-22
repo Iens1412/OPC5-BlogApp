@@ -10,11 +10,11 @@
 <form class="dashboard-poster">
     <div>
         <div class="form-group">
-            <label for="postContent">Post Content</label>
-            <textarea id="postContent" class="form-control" @bind="newPost.PostData" rows="3"></textarea>
+            <label for="postContent" style="font-weight: bold;">Post Content</label>
+            <textarea placeholder="Vad är det som händer?" id="postContent" class=" dashboard-poster-input" @bind="newPost.PostData"></textarea>
         </div>
-
-        <button style="margin-top: 15px;" type="submit" class="btn btn-success" @onclick="HandlePost">Post</button>
+        <hr />
+        <button style="margin-top: 15px;" type="submit" class="btn btn-primary dashboard-poster-button" @onclick="HandlePost">Gör ett inlägg</button>
 
     </div>
 </form>
@@ -22,11 +22,44 @@
 <style>
     .dashboard-poster {
         width: 100%;
-        background-color: #212121;
+        background-color: black;
         border: 1px solid white;
         padding: 10px;
 
-        margin-bottom: 5%;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+
+        /*margin-bottom: 5%;*/
+    }
+
+    .dashboard-poster-input {
+        background-color: transparent;
+        border: none;
+        width: 90%;
+        color: white;
+        margin: 20px;
+        resize: none;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dashboard-poster-input:hover {
+        border: none;
+        background-color: transparent;
+    }
+
+    .dashboard-poster-input:focus {
+        border: none;
+        outline: 0;
+    }
+
+    .dashboard-poster-button {
+        margin-left: 77%;
+        border-radius: 20px;
+        font-weight: bold;
     }
 </style>
 
