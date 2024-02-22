@@ -136,7 +136,7 @@
 @code {
     private List<Post> AllPosts = new List<Post>();
     private List<Post> DisplayedPosts = new List<Post>();
-    private int DisplayedPostsCount = 5; // Initial number of posts to display
+    private int DisplayedPostsCount = 5;
     private int TotalPostsCount = 0;
 
     /*POST PAGINATION*/
@@ -153,11 +153,9 @@
 
     private async Task LoadPosts()
     {
-        // Load posts
         AllPosts = await postService.GetPosts(DisplayedPostsCount);
         UpdateDisplayedPosts();
 
-        // Load total post count
         TotalPostsCount = await postService.GetTotalPostCount();
     }
 
@@ -169,7 +167,7 @@
         }
         else
         {
-            DisplayedPostsCount += 5; // Load five more posts
+            DisplayedPostsCount += 5;
         }
         
         await LoadPosts();
