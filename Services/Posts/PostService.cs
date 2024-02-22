@@ -1,4 +1,5 @@
-﻿using OPC5_BlogApp.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using OPC5_BlogApp.Data;
 using OPC5_BlogApp.Data.Models;
 
 namespace Services.Posts
@@ -45,11 +46,17 @@ namespace Services.Posts
             return foundPost;
         }
 
-        public List<Post> GetPosts()
+        public async Task<List<Post>> GetPosts(int count)
         {
-            List<Post> allPosts = context.Posts.ToList();
+            return await context.Posts
+                .OrderByDescending(p => p.PostId)
+                .Take(count)
+                .ToListAsync();
+        }
 
-            return allPosts;
+        public async Task<int> GetTotalPostCount()
+        {
+            return await context.Posts.CountAsync();
         }
 
         public List<Comment> GetPostComments(int postId)

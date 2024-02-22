@@ -6,15 +6,15 @@
 @rendermode InteractiveServer
 
 <div class="dashboard-container">
-    <PostComponent />
     <!--Loop posts and display them one by one-->
-    @if (posts == null)
+    @if (DisplayedPosts == null)
     {
         <p>Loading posts...</p>
     }
     else
     {
-        @foreach (var post in posts)
+        <PostComponent />
+        @foreach (var post in DisplayedPosts)
         {
             <div class="dashboard-post" id="@post.PostId">
                 <div class="username">
@@ -36,35 +36,13 @@
                 </div>
             </div>
         }
+
+        @if (RemainingPostsCount > 0)
+        {
+            <button style="margin-top: 2.5%;" class="btn btn-primary" @onclick="LoadMorePosts">Display More</button>
+        }
     }
     <!--Loop posts and display them one by one-->
-    <!--<div class="dashboard-post">
-        <div class="username">
-            <span>Username</span>
-        </div>
-        <div class="post">
-            <p style="margin-left: 5px;">First post</p>
-        </div>
-        <div class="footer">
-            <i @onclick="CommentPost" class="fa fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
-            <i @onclick="UpvotePost" class="fas fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">0</span></i>
-            <i @onclick="DownvotePost" class="fas fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">0</span></i>
-        </div>
-    </div>
-
-    <div class="dashboard-post">
-        <div class="username">
-            <span>Username</span>
-        </div>
-        <div class="post">
-            <p style="margin-left: 5px;">Second post</p>
-        </div>
-        <div class="footer">
-            <i class="fa fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
-            <i class="fas fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">0</span></i>
-            <i class="fas fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">0</span></i>
-        </div>
-    </div>-->
 </div>
 
 <style>
@@ -156,12 +134,50 @@
 </style>
 
 @code {
-    private List<Post>? posts;
+    private List<Post> AllPosts = new List<Post>();
+    private List<Post> DisplayedPosts = new List<Post>();
+    private int DisplayedPostsCount = 5; // Initial number of posts to display
+    private int TotalPostsCount = 0;
+
+    /*POST PAGINATION*/
+
+    private void UpdateDisplayedPosts()
+    {
+        DisplayedPosts = AllPosts.Take(DisplayedPostsCount).ToList();
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        posts = await Task.Run(() => postService.GetPosts());
+        await LoadPosts();
     }
+
+    private async Task LoadPosts()
+    {
+        // Load posts
+        AllPosts = await postService.GetPosts(DisplayedPostsCount);
+        UpdateDisplayedPosts();
+
+        // Load total post count
+        TotalPostsCount = await postService.GetTotalPostCount();
+    }
+
+    private async Task LoadMorePosts()
+    {
+        if (RemainingPostsCount < 5)
+        {
+            DisplayedPostsCount += RemainingPostsCount;
+        }
+        else
+        {
+            DisplayedPostsCount += 5; // Load five more posts
+        }
+        
+        await LoadPosts();
+    }
+
+    private int RemainingPostsCount => TotalPostsCount - DisplayedPosts.Count;
+
+    /*POST PAGINATION*/
 
     private async void UpvotePost(Post post)
     {

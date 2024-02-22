@@ -7,7 +7,8 @@ namespace Services.Posts
         void AddPost(Post post);
         Post? AddPostUpvote(int postId);
         Post? AddPostDownvote(int postId);
-        List<Post> GetPosts();
+        Task<List<Post>> GetPosts(int count);
+        Task<int> GetTotalPostCount();
         List<Comment> GetPostComments(int postId);
         Post? RemovePostUpvote(int postId);
         Post? RemovePostDownvote(int postId);
