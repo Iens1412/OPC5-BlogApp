@@ -1,0 +1,112 @@
+﻿@using Services.Posts
+@using OPC5_BlogApp.Data.Models
+@using OPC5_BlogApp.Components.Post
+@using OPC5_BlogApp.Data
+@using Microsoft.EntityFrameworkCore
+@using System.Linq
+@inject IPostService postService
+@rendermode InteractiveServer
+
+@page "/search"
+
+<!-- SearchBar.razor -->
+<div class="search-bar">
+    <input type="text" @bind="searchQuery" placeholder="Search...">
+    <button @onclick="HandleSearch">Search</button>
+</div>
+
+<div class="SearchPage">
+    <!--Loop posts and display them one by one-->
+    @if (matchingPosts.Any())
+    {
+        @foreach (var post in matchingPosts)
+        {
+            <div class="post-details">
+                <h3>PostId:</h3>
+                <h3>@post.PostId</h3>
+                <p>Post Data:</p>
+                <p>@post.PostData</p>
+            </div>
+        }
+    }
+    else if (!string.IsNullOrEmpty(searchQuery))
+    {
+        <p>No matching posts found.</p>
+    }
+    <!--Loop posts and display them one by one-->
+</div>
+
+<style>
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background-color: #f5f8fa; /* Twitter's search bar background color */
+        border: 1px solid #ccd6dd; /* Twitter's search bar border color */
+        border-radius: 25px; /* Rounded corners */
+        padding: 5px 10px; /* Adjust padding as needed */
+    }
+
+        .search-bar input[type="text"] {
+            flex: 1; /* Fill remaining space */
+            border: none;
+            background-color: transparent; /* Transparent background */
+            margin-right: 10px; /* Spacing between input and button */
+            font-size: 14px; /* Font size */
+            outline: none; /* Remove outline */
+        }
+
+        .search-bar button {
+            background-color: #1da1f2; /* Twitter's search button background color */
+            color: #fff; /* Text color */
+            border: none;
+            border-radius: 25px; /* Rounded corners */
+            padding: 8px 15px; /* Adjust padding as needed */
+            font-size: 14px; /* Font size */
+            cursor: pointer; /* Cursor style */
+            outline: none; /* Remove outline */
+        }
+
+            /* Hover effect */
+            .search-bar button:hover {
+                background-color: #1990db; /* Darker shade of blue on hover */
+            }
+
+            /* Active (clicked) effect */
+            .search-bar button:active {
+                background-color: #1477b2; /* Even darker shade of blue when clicked */
+            }
+
+    .post-details {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+        .post-details h3 {
+            margin-top: 0;
+        }
+
+        .post-details p {
+            margin-bottom: 0;
+        }
+</style>
+
+@code {
+    private string searchQuery;
+    private List<OPC5_BlogApp.Data.Models.Post> matchingPosts = new List<OPC5_BlogApp.Data.Models.Post>();
+
+    private async Task HandleSearch()
+    {
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            matchingPosts = await postService.GetPostsWithData(searchQuery);
+        }
+        else
+        {
+            // Clear the list if search query is empty
+            matchingPosts.Clear();
+        }
+    }
+}
