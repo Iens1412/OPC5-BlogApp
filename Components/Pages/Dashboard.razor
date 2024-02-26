@@ -139,8 +139,6 @@
     private int DisplayedPostsCount = 5;
     private int TotalPostsCount = 0;
 
-    /*POST PAGINATION*/
-
     private void UpdateDisplayedPosts()
     {
         DisplayedPosts = AllPosts.Take(DisplayedPostsCount).ToList();
@@ -174,8 +172,6 @@
     }
 
     private int RemainingPostsCount => TotalPostsCount - DisplayedPosts.Count;
-
-    /*POST PAGINATION*/
 
     private async void UpvotePost(Post post)
     {
