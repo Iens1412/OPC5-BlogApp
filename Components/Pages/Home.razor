@@ -3,11 +3,13 @@
 @using OPC5_BlogApp.Data.Models
 @using OPC5_BlogApp.Components.Post;
 @inject IPostService postService;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 <div class="dashboard-container">
     <!--Loop posts and display them one by one-->
+
     @if (DisplayedPosts == null)
     {
         <p>Loading posts...</p>
@@ -20,8 +22,8 @@
             <div class="dashboard-post" id="@post.PostId">
                 <div class="username">
                     <span>
-                        PostUser <span style="color: #424242;">
-                            &#64;PostUser
+                        @post.User.Username <span style="color: #424242;">
+                            &#64;@post.User.Username
                         </span>
                     </span>
                 </div>
@@ -139,6 +141,10 @@
     private int DisplayedPostsCount = 5;
     private int TotalPostsCount = 0;
 
+    private string? errorMessage;
+
+    private string? username;
+
     private void UpdateDisplayedPosts()
     {
         DisplayedPosts = AllPosts.Take(DisplayedPostsCount).ToList();
@@ -147,6 +153,19 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadPosts();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            User? user = await sessionStorage.GetItemAsync<User>("userData");
+
+            if(user != null)
+            {
+                username = user.Username;
+            }
+        }
     }
 
     private async Task LoadPosts()

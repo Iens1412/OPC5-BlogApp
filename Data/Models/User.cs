@@ -12,6 +12,5 @@ namespace OPC5_BlogApp.Data.Models
         public string Username { get; set; }
         public string Hashed { get; set; }
         public string Email { get; set; }
-        public Post[]? Posts { get; set; }
     }
 }

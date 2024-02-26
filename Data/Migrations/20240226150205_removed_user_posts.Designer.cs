@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OPC5_BlogApp.Data;
 
@@ -10,9 +11,11 @@ using OPC5_BlogApp.Data;
 namespace OPC5_BlogApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240226150205_removed_user_posts")]
+    partial class removed_user_posts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,12 +63,7 @@ namespace OPC5_BlogApp.Migrations
                     b.Property<int>("PostUpvotes")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("PostId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -128,17 +126,6 @@ namespace OPC5_BlogApp.Migrations
                     b.Navigation("CommentUser");
                 });
 
-            modelBuilder.Entity("OPC5_BlogApp.Data.Models.Post", b =>
-                {
-                    b.HasOne("OPC5_BlogApp.Data.Models.User", "User")
-                        .WithMany("Posts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OPC5_BlogApp.Data.Models.Tag", b =>
                 {
                     b.HasOne("OPC5_BlogApp.Data.Models.Post", null)
@@ -151,11 +138,6 @@ namespace OPC5_BlogApp.Migrations
                     b.Navigation("PostComments");
 
                     b.Navigation("PostTags");
-                });
-
-            modelBuilder.Entity("OPC5_BlogApp.Data.Models.User", b =>
-                {
-                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

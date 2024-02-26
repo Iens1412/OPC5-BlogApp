@@ -5,6 +5,8 @@
 @using System.ComponentModel.DataAnnotations.Schema
 @inject IUserService userService
 @inject IPostService postService
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject NavigationManager Navigate
 @rendermode InteractiveServer
 
 <form class="dashboard-poster">
@@ -15,7 +17,6 @@
         </div>
         <hr />
         <button style="margin-top: 15px;" type="submit" class="btn btn-primary dashboard-poster-button" @onclick="HandlePost">Gör ett inlägg</button>
-
     </div>
 </form>
 
@@ -57,7 +58,7 @@
     }
 
     .dashboard-poster-button {
-        margin-left: 77%;
+        margin-left: 70%;
         border-radius: 20px;
         font-weight: bold;
     }
@@ -67,8 +68,16 @@
     private User currentUser = new User();
     private Post newPost = new Post();
 
-    private void HandlePost()
+    private async void HandlePost()
     {
+        User? user = await sessionStorage.GetItemAsync<User>("userData");
+
+        if (user == null)
+        {
+            Navigate.NavigateTo("/login");
+        }
+
+
         /* Check if logged in, if not then redirect! */
         if (String.IsNullOrWhiteSpace(newPost.PostData) || String.IsNullOrEmpty(newPost.PostData))
         {
@@ -78,6 +87,7 @@
             return;
         }
 
+        newPost.UserId = user.UserId;
         postService.AddPost(newPost);
         newPost = new Post();
 
