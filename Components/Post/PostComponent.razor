@@ -72,26 +72,26 @@
     {
         User? user = await sessionStorage.GetItemAsync<User>("userData");
 
-        if (user == null)
+        if (user != null)
+        {
+            /* Check if logged in, if not then redirect! */
+            if (String.IsNullOrWhiteSpace(newPost.PostData) || String.IsNullOrEmpty(newPost.PostData))
+            {
+                Console.WriteLine("Returning since no message was entered.");
+                StateHasChanged();
+
+                return;
+            }
+
+            newPost.UserId = user.UserId;
+            postService.AddPost(newPost);
+            newPost = new Post();
+
+            StateHasChanged();
+        } else
         {
             Navigate.NavigateTo("/login");
         }
-
-
-        /* Check if logged in, if not then redirect! */
-        if (String.IsNullOrWhiteSpace(newPost.PostData) || String.IsNullOrEmpty(newPost.PostData))
-        {
-            Console.WriteLine("Returning since no message was entered.");
-            StateHasChanged();
-
-            return;
-        }
-
-        newPost.UserId = user.UserId;
-        postService.AddPost(newPost);
-        newPost = new Post();
-
-        StateHasChanged();
     }
 }
 
