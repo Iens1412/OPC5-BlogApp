@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
 @using Services.Posts
 @using OPC5_BlogApp.Data.Models
 @using OPC5_BlogApp.Components.Post;
@@ -192,6 +193,7 @@
 
     private int RemainingPostsCount => TotalPostsCount - DisplayedPosts.Count;
 
+    [Authorize]
     private async void UpvotePost(Post post)
     {
         await Task.Run(() => postService.AddPostUpvote(post.PostId));
@@ -199,12 +201,14 @@
         Console.WriteLine("Upvote on post!");
     }
 
+    [Authorize]
     private async void DownvotePost(Post post)
     {
         await Task.Run(() => postService.AddPostDownvote(post.PostId));
         StateHasChanged();
     }
 
+    [Authorize]
     private void CommentPost(Post post)
     {
         Console.WriteLine("Comment on post!");
