@@ -9,9 +9,16 @@ namespace Services.Tags
 
         public List<Tag> GetTags()
         {
-            List<Tag> allTags = context.Tags.ToList();
+            List<Tag> allTags = context.Tag.ToList();
 
             return allTags;
         }
+
+        public async Task AddTag(Tag tag)
+        {
+            _context.Tag.Add(tag);
+            _context.SaveChanges();
+        }
+
     }
 }

@@ -1,10 +1,12 @@
 ﻿@page "/Search"
 @using Services.Posts
+@using Services.Tags
 @using OPC5_BlogApp.Data.Models
 @using OPC5_BlogApp.Components.Post
 @using OPC5_BlogApp.Data
 @using Microsoft.EntityFrameworkCore
 @using System.Linq
+@inject ITagService tagService
 @inject IPostService postService
 @rendermode InteractiveServer
 
@@ -15,7 +17,7 @@
 </div>
 
 <div class="SearchPage">
-    <!--Loop posts and display them one by one-->
+    <!-- Loop posts and display them one by one -->
     @if (matchingPosts.Any())
     {
         @foreach (var post in matchingPosts)
@@ -39,7 +41,6 @@
                         <i @onclick="() => UpvotePost(post)" class="far fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
                         <i @onclick="() => DownvotePost(post)" class="far fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
                     </div>
-
                 </div>
             </div>
         }
@@ -48,7 +49,7 @@
     {
         <p style="color: white">Inga inlägg matchar.</p>
     }
-    <!--Loop posts and display them one by one-->
+    <!-- Loop posts and display them one by one -->
 </div>
 
 <style>
@@ -168,7 +169,28 @@
     {
         if (!string.IsNullOrEmpty(searchQuery))
         {
-            matchingPosts = await postService.GetPostsWithData(searchQuery);
+            if (searchQuery.StartsWith("#"))
+            {
+                string tagName = searchQuery.Split(' ')[0].TrimStart('#');
+                var tags = tagService.GetTags();
+                var matchingTag = tags.FirstOrDefault(tag => tag.TagName == tagName);
+
+                if (matchingTag != null)
+                {
+                    var matchingTagIds = tags.Where(tag => tag.TagName == tagName).Select(tag => tag.PostId).ToList();
+                    matchingPosts = await postService.GetPostsByIds(matchingTagIds);
+                }
+                else
+                {
+                    // No matching tag found
+                    matchingPosts.Clear();
+                }
+            }
+            else
+            {
+                // Regular post search based on post data
+                matchingPosts = await postService.GetPostsWithData(searchQuery);
+            }
         }
         else
         {

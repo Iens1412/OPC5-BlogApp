@@ -8,7 +8,7 @@ namespace Services.Posts
     {
         private readonly ApplicationDbContext context = _context;
 
-        public void AddPost(Post post)
+        public async Task AddPost(Post post)
         {
             context.Posts.Add(post);
             context.SaveChanges();
@@ -60,6 +60,12 @@ namespace Services.Posts
                 .Where(p => p.PostData.Contains(searchData)) // Assuming PostData is a string and you want to search for a substring
                 .OrderBy(p => p.PostData) // Assuming you still want to order the results by PostData
                 .ToListAsync();
+        }
+
+        public async Task<List<Post>> GetPostsByIds(List<int> postIds)
+        {
+            // Query the database to retrieve posts with the specified IDs
+            return await _context.Posts.Where(post => postIds.Contains(post.PostId)).ToListAsync();
         }
 
         public async Task<int> GetTotalPostCount()

@@ -5,5 +5,7 @@ namespace Services.Tags
     public interface ITagService
     {
         List<Tag> GetTags();
+
+        Task AddTag(Tag tag);
     }
 }
