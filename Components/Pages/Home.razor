@@ -1,7 +1,193 @@
 ﻿@page "/"
+@using Services.Posts
+@using OPC5_BlogApp.Data.Models
+@using OPC5_BlogApp.Components.Post;
+@inject IPostService postService;
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
+<div class="dashboard-container">
+    <!--Loop posts and display them one by one-->
+    @if (DisplayedPosts == null)
+    {
+        <p>Loading posts...</p>
+    }
+    else
+    {
+        <PostComponent />
+        @foreach (var post in DisplayedPosts)
+        {
+            <div class="dashboard-post" id="@post.PostId">
+                <div class="username">
+                    <span>
+                        PostUser <span style="color: #424242;">
+                            &#64;PostUser
+                        </span>
+                    </span>
+                </div>
 
-<h1>Hello, world!</h1>
+                <div class="post">
+                    <p style="margin-left: 5px;">@post.PostData</p>
+                </div>
 
-Welcome to your new app.
+                <div class="footer">
+                    <i @onclick="() => CommentPost(post)" class="far fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
+                    <i @onclick="() => UpvotePost(post)" class="far fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
+                    <i @onclick="() => DownvotePost(post)" class="far fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
+                </div>
+            </div>
+        }
+
+        @if (RemainingPostsCount > 0)
+        {
+            <button style="margin-top: 2.5%; border-radius: 20px;" class="btn btn-primary" @onclick="LoadMorePosts">Ladda Fler</button>
+        }
+    }
+    <!--Loop posts and display them one by one-->
+</div>
+
+<style>
+    body {
+        background-color: black;
+    }
+
+    .dashboard-container {
+        border-radius: 5px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /*border: solid 1px white;*/ /*DEBUG*/
+        width: 30%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .dashboard-post {
+        font-family: Poppins;
+        border: solid 1px white; /*DEBUG*/
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+    }
+
+        .dashboard-post:last-child {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .dashboard-post:hover {
+            background-color: #212121;
+        }
+
+        .dashboard-post .username {
+            margin: 1%;
+            align-self: flex-start;
+            font-weight: bolder;
+        }
+
+        .dashboard-post .post {
+            /*border: solid 2px red;*/ /*DEBUG*/
+            margin-left: 5%;
+            margin-right: 5%;
+            width: 85%;
+            align-self: flex-end;
+        }
+
+        .dashboard-post .footer {
+            display: flex;
+            justify-content: space-around;
+            align-self: center;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+
+            .dashboard-post .footer i {
+                margin-right: 50px;
+                margin-bottom: 10px;
+            }
+
+            .dashboard-post .footer .icon-comment:hover {
+                color: blue;
+                cursor: pointer;
+            }
+
+            .dashboard-post .footer .icon-thumbsup:hover {
+                color: lime;
+                cursor: pointer;
+            }
+
+            .dashboard-post .footer .icon-thumbsdown:hover {
+                color: red;
+                cursor: pointer;
+            }
+
+    font-face {
+        font-family: "Poppins";
+        src: url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Roboto&amp;display=swap");
+        font-weight: bold;
+    }
+</style>
+
+@code {
+    private List<Post> AllPosts = new List<Post>();
+    private List<Post> DisplayedPosts = new List<Post>();
+    private int DisplayedPostsCount = 5;
+    private int TotalPostsCount = 0;
+
+    private void UpdateDisplayedPosts()
+    {
+        DisplayedPosts = AllPosts.Take(DisplayedPostsCount).ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPosts();
+    }
+
+    private async Task LoadPosts()
+    {
+        AllPosts = await postService.GetPosts(DisplayedPostsCount);
+        UpdateDisplayedPosts();
+
+        TotalPostsCount = await postService.GetTotalPostCount();
+    }
+
+    private async Task LoadMorePosts()
+    {
+        if (RemainingPostsCount < 5)
+        {
+            DisplayedPostsCount += RemainingPostsCount;
+        }
+        else
+        {
+            DisplayedPostsCount += 5;
+        }
+
+        await LoadPosts();
+    }
+
+    private int RemainingPostsCount => TotalPostsCount - DisplayedPosts.Count;
+
+    private async void UpvotePost(Post post)
+    {
+        await Task.Run(() => postService.AddPostUpvote(post.PostId));
+        StateHasChanged();
+        Console.WriteLine("Upvote on post!");
+    }
+
+    private async void DownvotePost(Post post)
+    {
+        await Task.Run(() => postService.AddPostDownvote(post.PostId));
+        StateHasChanged();
+    }
+
+    private void CommentPost(Post post)
+    {
+        Console.WriteLine("Comment on post!");
+    }
+}

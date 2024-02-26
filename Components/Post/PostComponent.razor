@@ -70,7 +70,7 @@
     private void HandlePost()
     {
         /* Check if logged in, if not then redirect! */
-        if (newPost.PostData == null)
+        if (String.IsNullOrWhiteSpace(newPost.PostData) || String.IsNullOrEmpty(newPost.PostData))
         {
             Console.WriteLine("Returning since no message was entered.");
             StateHasChanged();
