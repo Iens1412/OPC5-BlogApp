@@ -1,0 +1,188 @@
+﻿@using Services.Posts
+@using OPC5_BlogApp.Data.Models
+@using OPC5_BlogApp.Components.Post
+@using OPC5_BlogApp.Data
+@using Microsoft.EntityFrameworkCore
+@using System.Linq
+@inject IPostService postService
+@rendermode InteractiveServer
+
+<!-- SearchBar.razor -->
+<div class="search-bar">
+    <input type="text" @bind="searchQuery" placeholder="Search...">
+    <button @onclick="HandleSearch">Search</button>
+</div>
+
+<div class="SearchPage">
+    <!--Loop posts and display them one by one-->
+    @if (matchingPosts.Any())
+    {
+        @foreach (var post in matchingPosts)
+        {
+            <div class="Search-Post">
+                <div class="post-details" id="@post.PostId">
+                    <div class="username">
+                        <span>
+                            PostUser <span style="color: #424242;">
+                                &#64;PostUser
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="post">
+                        <p style="margin-left: 5px;">@post.PostData</p>
+                    </div>
+
+                    <div class="footer">
+                        <i @onclick="() => CommentPost(post)" class="far fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
+                        <i @onclick="() => UpvotePost(post)" class="far fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
+                        <i @onclick="() => DownvotePost(post)" class="far fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
+                    </div>
+
+                </div>
+            </div>
+        }
+    }
+    else if (!string.IsNullOrEmpty(searchQuery))
+    {
+        <p>No matching posts found.</p>
+    }
+    <!--Loop posts and display them one by one-->
+</div>
+
+<style>
+    .search-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f8fa; /* Twitter's search bar background color */
+        border: 1px solid #ccd6dd; /* Twitter's search bar border color */
+        border-radius: 25px; /* Rounded corners */
+        padding: 5px 10px; /* Adjust padding as needed */
+        margin-bottom: 20px;
+    }
+
+        .search-bar input[type="text"] {
+            flex: 1; /* Fill remaining space */
+            border: none;
+            background-color: transparent; /* Transparent background */
+            margin-right: 10px; /* Spacing between input and button */
+            font-size: 14px; /* Font size */
+            outline: none; /* Remove outline */
+        }
+
+        .search-bar button {
+            background-color: #1da1f2; /* Twitter's search button background color */
+            color: #fff; /* Text color */
+            border: none;
+            border-radius: 25px; /* Rounded corners */
+            padding: 8px 15px; /* Adjust padding as needed */
+            font-size: 14px; /* Font size */
+            cursor: pointer; /* Cursor style */
+            outline: none; /* Remove outline */
+        }
+
+            /* Hover effect */
+            .search-bar button:hover {
+                background-color: #1990db; /* Darker shade of blue on hover */
+            }
+
+            /* Active (clicked) effect */
+            .search-bar button:active {
+                background-color: #1477b2; /* Even darker shade of blue when clicked */
+            }
+
+    .Search-post {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        padding: 10px;
+        width: 50%;
+        margin: 0 auto; /* Centering the post */
+    }
+
+    .post-details {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        padding: 10px;
+        width: 50%;
+        margin: 0 auto; /* Centering the post */
+    }
+
+    .username {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .post {
+        margin-bottom: 10px;
+    }
+
+    .footer {
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Center align the content horizontally */
+    }
+
+        .footer i {
+            margin-right: 50px;
+            margin-bottom: 10px;
+        }
+
+        .footer .icon-comment:hover {
+            color: blue;
+            cursor: pointer;
+        }
+
+        .footer .icon-thumbsup:hover {
+            color: lime;
+            cursor: pointer;
+        }
+
+        .footer .icon-thumbsdown:hover {
+            color: red;
+            cursor: pointer;
+        }
+
+    cursor: pointer; /* Change cursor to pointer */
+    }
+</style>
+
+@code {
+    private string searchQuery;
+    private List<OPC5_BlogApp.Data.Models.Post> matchingPosts = new List<OPC5_BlogApp.Data.Models.Post>();
+
+    private async Task HandleSearch()
+    {
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            matchingPosts = await postService.GetPostsWithData(searchQuery);
+        }
+        else
+        {
+            // Clear the list if search query is empty
+            matchingPosts.Clear();
+        }
+    }
+
+    private async void UpvotePost(Post post)
+    {
+        await Task.Run(() => postService.AddPostUpvote(post.PostId));
+        StateHasChanged();
+        Console.WriteLine("Upvote on post!");
+    }
+
+    private async void DownvotePost(Post post)
+    {
+        await Task.Run(() => postService.AddPostDownvote(post.PostId));
+        StateHasChanged();
+    }
+
+    private void CommentPost(Post post)
+    {
+        Console.WriteLine("Comment on post!");
+    }
+}
