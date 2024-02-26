@@ -10,8 +10,8 @@
 
 <!-- SearchBar.razor -->
 <div class="search-bar">
-    <input type="text" @bind="searchQuery" placeholder="Search...">
-    <button @onclick="HandleSearch">Search</button>
+    <input type="text" @bind="searchQuery" placeholder="Sök...">
+    <button @onclick="HandleSearch">Sök</button>
 </div>
 
 <div class="SearchPage">
@@ -46,7 +46,7 @@
     }
     else if (!string.IsNullOrEmpty(searchQuery))
     {
-        <p style="color: white">No matching posts found.</p>
+        <p style="color: white">Inga inlägg matchar.</p>
     }
     <!--Loop posts and display them one by one-->
 </div>
