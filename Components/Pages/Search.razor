@@ -1,4 +1,5 @@
-﻿@using Services.Posts
+﻿@page "/Search"
+@using Services.Posts
 @using OPC5_BlogApp.Data.Models
 @using OPC5_BlogApp.Components.Post
 @using OPC5_BlogApp.Data
@@ -45,12 +46,16 @@
     }
     else if (!string.IsNullOrEmpty(searchQuery))
     {
-        <p>No matching posts found.</p>
+        <p style="color: white">No matching posts found.</p>
     }
     <!--Loop posts and display them one by one-->
 </div>
 
 <style>
+
+    body{
+        background-color : black
+    }
     .search-bar {
         display: flex;
         align-items: center;
@@ -96,7 +101,7 @@
         margin-bottom: 20px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        background-color: #f9f9f9;
+        background-color: black;
         padding: 10px;
         width: 50%;
         margin: 0 auto; /* Centering the post */
@@ -106,7 +111,7 @@
         margin-bottom: 20px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        background-color: #f9f9f9;
+        background-color: black;
         padding: 10px;
         width: 50%;
         margin: 0 auto; /* Centering the post */
@@ -115,13 +120,17 @@
     .username {
         font-weight: bold;
         margin-bottom: 5px;
+        color: white
     }
 
     .post {
         margin-bottom: 10px;
+        background-color : black;
+        color: white;
     }
 
     .footer {
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center; /* Center align the content horizontally */
