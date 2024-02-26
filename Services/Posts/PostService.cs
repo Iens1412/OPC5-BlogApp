@@ -54,6 +54,14 @@ namespace Services.Posts
                 .ToListAsync();
         }
 
+        public async Task<List<Post>> GetPostsWithData(string searchData)
+        {
+            return await context.Posts
+                .Where(p => p.PostData.Contains(searchData)) // Assuming PostData is a string and you want to search for a substring
+                .OrderBy(p => p.PostData) // Assuming you still want to order the results by PostData
+                .ToListAsync();
+        }
+
         public async Task<int> GetTotalPostCount()
         {
             return await context.Posts.CountAsync();
@@ -103,3 +111,4 @@ namespace Services.Posts
         }
     }
 }
+
