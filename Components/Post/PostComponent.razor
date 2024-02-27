@@ -9,14 +9,14 @@
 @inject NavigationManager Navigate
 @rendermode InteractiveServer
 
-<form class="dashboard-poster">
+<form @onsubmit="HandlePost" class="dashboard-poster">
     <div>
         <div class="form-group">
             <label for="postContent" style="font-weight: bold;">Post Content</label>
             <textarea placeholder="Vad är det som händer?" id="postContent" class=" dashboard-poster-input" @bind="newPost.PostData"></textarea>
         </div>
         <hr />
-        <button style="margin-top: 15px;" type="submit" class="btn btn-primary dashboard-poster-button" @onclick="HandlePost">Gör ett inlägg</button>
+        <button style="margin-top: 15px;" type="submit" class="btn btn-primary dashboard-poster-button">Gör ett inlägg</button>
     </div>
 </form>
 
@@ -68,6 +68,9 @@
     private User currentUser = new User();
     private Post newPost = new Post();
 
+    [Parameter]
+    public EventCallback ReloadPosts { get; set; }
+
     private async void HandlePost()
     {
         User? user = await sessionStorage.GetItemAsync<User>("userData");
@@ -88,6 +91,8 @@
             newPost = new Post();
 
             StateHasChanged();
+
+            await ReloadPosts.InvokeAsync();
         } else
         {
             Navigate.NavigateTo("/login");

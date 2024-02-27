@@ -17,7 +17,7 @@
     }
     else
     {
-        <PostComponent />
+        <PostComponent ReloadPosts="@LoadPosts" />
         @foreach (var post in DisplayedPosts)
         {
             <div class="dashboard-post" id="@post.PostId">
