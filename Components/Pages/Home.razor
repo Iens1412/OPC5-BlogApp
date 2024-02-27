@@ -12,7 +12,7 @@
 @if (username != null)
 {
     <button @onclick="Logout" class="btn btn-primary" style="float: left;">Logout</button>
-    <p style="margin-left: 4%; margin-top: 0.4%;">Logged in as <span style="color: white;">@username</span></p>
+    <p style="margin-left: 4%; margin-top: 0.4%;">Logged in as <span @onclick='() => Navigate.NavigateTo("/profile")' class="hover-span" style="color: white;">@username</span></p>
 }
 else
 {
@@ -135,6 +135,10 @@ else
 
     .dashboard-post .footer .icon-thumbsdown:hover {
         color: red;
+        cursor: pointer;
+    }
+
+    .hover-span:hover {
         cursor: pointer;
     }
 
