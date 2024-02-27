@@ -8,5 +8,6 @@ namespace Services.Users
     {
         void AddUser(User user);
         User? GetUserByUsername(string username);
+        Task<bool> UpdateUserPassword(string username, string newPassword);
     }
 }
