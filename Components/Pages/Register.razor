@@ -2,7 +2,6 @@
 @using Services.Users
 @using Data.Models
 @inject IUserService userService
-@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 @inject NavigationManager Navigate
 @rendermode InteractiveServer
 
@@ -35,6 +34,9 @@
             <small id="passwordHelp" class="form-text text-muted">We'll never share this data with anyone.</small>
         </div>
         <button type="submit" class="btn btn-success">Register</button>
+        <div style="margin-top: 5%;" class="form-group">
+            <label>Do you already have an account? <a href="/login">Login here</a></label>
+        </div>
     </form>
 </div>
 
@@ -59,26 +61,13 @@
     private User registerData = new User();
     private string? errorMessage;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            User? user = await sessionStorage.GetItemAsync<User>("userData");
-
-            if (user != null)
-            {
-                Navigate.NavigateTo("/");
-            }
-        }
-    }
-
     private void PerformRegister()
     {
         User? user = userService.GetUserByUsername(registerData.Username);
 
         if (user == null)
         {
-            if (registerData.Email != "" && registerData.Hashed != "")
+            if (!String.IsNullOrEmpty(registerData.Email) || !String.IsNullOrEmpty(registerData.Hashed) || !String.IsNullOrEmpty(registerData.Username))
             {
                 userService.AddUser(registerData);
 
