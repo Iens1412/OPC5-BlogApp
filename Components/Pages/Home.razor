@@ -9,6 +9,16 @@
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
+@if (username != null)
+{
+    <button @onclick="Logout" class="btn btn-primary" style="float: left;">Logout</button>
+    <p style="margin-left: 4%; margin-top: 0.4%;">Logged in as <span style="color: white;">@username</span></p>
+}
+else
+{
+    <button @onclick='() => Navigate.NavigateTo("/login")' class="btn btn-primary" style="float: left;">Login</button>
+    <p style="margin-left: 3%; margin-top: 0.4%;">Not logged in</p>
+}
 <div class="dashboard-container">
     <!--Loop posts and display them one by one-->
 
@@ -165,6 +175,19 @@
             {
                 username = user.Username;
             }
+        }
+    }
+
+    private async void Logout()
+    {
+        User? user = await sessionStorage.GetItemAsync<User>("userData");
+
+        if (user != null)
+        {
+            await sessionStorage.RemoveItemAsync("userData");
+            username = null;
+
+            StateHasChanged();
         }
     }
 
