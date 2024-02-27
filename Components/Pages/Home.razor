@@ -5,6 +5,7 @@
 @using OPC5_BlogApp.Components.Post;
 @inject IPostService postService;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject NavigationManager Navigate
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
@@ -191,24 +192,44 @@
 
     private int RemainingPostsCount => TotalPostsCount - DisplayedPosts.Count;
 
-    [Authorize]
     private async void UpvotePost(Post post)
     {
-        await Task.Run(() => postService.AddPostUpvote(post.PostId));
-        StateHasChanged();
-        Console.WriteLine("Upvote on post!");
+        User? user = await sessionStorage.GetItemAsync<User>("userData");
+
+        if (user != null)
+        {
+            await Task.Run(() => postService.AddPostUpvote(post.PostId));
+            StateHasChanged();
+        } else
+        {
+            Navigate.NavigateTo("/login");
+        }
     }
 
-    [Authorize]
     private async void DownvotePost(Post post)
     {
-        await Task.Run(() => postService.AddPostDownvote(post.PostId));
-        StateHasChanged();
+        User? user = await sessionStorage.GetItemAsync<User>("userData");
+
+        if (user != null)
+        {
+            await Task.Run(() => postService.AddPostDownvote(post.PostId));
+            StateHasChanged();
+        } else
+        {
+            Navigate.NavigateTo("/login");
+        }
     }
 
-    [Authorize]
-    private void CommentPost(Post post)
+    private async void CommentPost(Post post)
     {
-        Console.WriteLine("Comment on post!");
+        User? user = await sessionStorage.GetItemAsync<User>("userData");
+
+        if (user != null)
+        {
+            Console.WriteLine("Comment on post!");
+        } else
+        {
+            Navigate.NavigateTo("/login");
+        }
     }
 }
