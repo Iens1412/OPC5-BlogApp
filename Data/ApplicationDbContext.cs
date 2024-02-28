@@ -11,13 +11,13 @@ namespace OPC5_BlogApp.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
+
         }
 
 
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Comment> Comment { get; set; }
+        public DbSet<Tag> Tag { get; set; }
     }
 }

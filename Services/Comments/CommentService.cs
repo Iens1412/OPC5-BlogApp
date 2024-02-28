@@ -1,5 +1,6 @@
 ﻿using OPC5_BlogApp.Data;
 using OPC5_BlogApp.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services.Posts
 {
@@ -7,17 +8,27 @@ namespace Services.Posts
     {
         private readonly ApplicationDbContext context = _context;
 
-        public void AddComment(Comment comment)
+        public async Task AddComment(Comment comment)
         {
-            context.Comments.Add(comment);
+            context.Comment.Add(comment);
             context.SaveChanges();
         }
 
         public List<Comment> GetComments()
         {
-            List<Comment> allComments = context.Comments.ToList();
+            List<Comment> allComments = context.Comment.ToList();
 
             return allComments;
+        }
+
+        public async Task<int> GetCommentsCount(int postId)
+        {
+            // Retrieve the count of comments for the specified post
+            var commentsCount = await _context.Comment
+                .Where(c => c.PostId == postId)
+                .CountAsync();
+
+            return commentsCount;
         }
     }
 }

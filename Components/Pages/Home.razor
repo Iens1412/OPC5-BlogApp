@@ -4,6 +4,7 @@
 @using OPC5_BlogApp.Data.Models
 @using OPC5_BlogApp.Components.Post;
 @inject IPostService postService;
+@inject ICommentService commentService;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 @inject NavigationManager Navigate
 @rendermode InteractiveServer
@@ -21,7 +22,6 @@ else
 }
 <div class="dashboard-container">
     <!--Loop posts and display them one by one-->
-
     @if (DisplayedPosts == null)
     {
         <p>Loading posts...</p>
@@ -44,11 +44,23 @@ else
                     <p style="margin-left: 5px;">@post.PostData</p>
                 </div>
 
+                <!-- Line to separate post and comment component -->
+                <hr style="width: 95%; border-top: 1px solid #ccc; margin: 10px auto;" />
+
                 <div class="footer">
-                    <i @onclick="() => CommentPost(post)" class="far fa-comment icon-comment"><span style="margin-left: 5px;">0</span></i>
+                    <i @onclick="() => ToggleCommentField(post.PostId)" class="far fa-comment icon-comment" style="cursor: pointer;">0</i>
                     <i @onclick="() => UpvotePost(post)" class="far fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
                     <i @onclick="() => DownvotePost(post)" class="far fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
                 </div>
+
+                @if (IsCommentFieldVisible(post.PostId))
+                {
+                    <!-- Improved styling for comment component -->
+                    <div class="comment-container">
+                        <CommentComponent PostId="@post.PostId" />
+                    </div>
+                }
+
             </div>
         }
 
@@ -88,72 +100,96 @@ else
         font-size: 16px;
     }
 
-    .dashboard-post:last-child {
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-    }
+        .dashboard-post:last-child {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
 
-    .dashboard-post:hover {
-        background-color: #212121;
-    }
+        .dashboard-post:hover {
+            background-color: #212121;
+        }
 
-    .dashboard-post .username {
-        margin: 1%;
-        align-self: flex-start;
-        font-weight: bolder;
-    }
+        .dashboard-post .username {
+            margin: 1%;
+            align-self: flex-start;
+            font-weight: bolder;
+        }
 
-    .dashboard-post .post {
-        margin-left: 5%;
-        margin-right: 5%;
-        width: 85%;
-        align-self: flex-end;
-    }
+        .dashboard-post .post {
+            margin-left: 5%;
+            margin-right: 5%;
+            width: 85%;
+            align-self: flex-end;
+        }
 
-    .dashboard-post .footer {
-        display: flex;
-        justify-content: space-around;
-        align-self: center;
-        margin-top: 10px;
-        font-size: 20px;
-    }
+        .dashboard-post .footer {
+            display: flex;
+            justify-content: space-around;
+            align-self: center;
+            margin-top: 10px;
+            font-size: 20px;
+        }
 
-    .dashboard-post .footer i {
-        margin-right: 50px;
-        margin-bottom: 10px;
-    }
+            .dashboard-post .footer i {
+                margin-right: 50px;
+                margin-bottom: 10px;
+            }
 
-    .dashboard-post .footer .icon-comment:hover {
-        color: blue;
-        cursor: pointer;
-    }
+            .dashboard-post .footer .icon-comment:hover {
+                color: blue;
+                cursor: pointer;
+            }
 
-    .dashboard-post .footer .icon-thumbsup:hover {
-        color: lime;
-        cursor: pointer;
-    }
+            .dashboard-post .footer .icon-thumbsup:hover {
+                color: lime;
+                cursor: pointer;
+            }
 
-    .dashboard-post .footer .icon-thumbsdown:hover {
-        color: red;
-        cursor: pointer;
-    }
+            .dashboard-post .footer .icon-thumbsdown:hover {
+                color: red;
+                cursor: pointer;
+            }
 
     .hover-span:hover {
         cursor: pointer;
     }
 
-    font-face {
-        font-family: "Poppins";
-        src: url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Roboto&amp;display=swap");
+    .comment-container {
+        width: 95%;
+        margin: 10px auto;
+    }
+
+    .comment {
+        background-color: #f5f8fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 16px;
+        font-size: 16px;
+        background-color: black;
+        color: white;
+        border: 1px solid #ccc;
+        padding-left: 10px;
+    }
+
+    .user {
         font-weight: bold;
+        color: #1da1f2;
+        margin-bottom: 4px;
+    }
+
+    .text {
+        white-space: pre-wrap;
     }
 </style>
 
 @code {
     private List<Post> AllPosts = new List<Post>();
     private List<Post> DisplayedPosts = new List<Post>();
+    private List<int> postsWithCommentsToggled = new List<int>();
     private int DisplayedPostsCount = 5;
     private int TotalPostsCount = 0;
+    private bool ShowCommentField = false;
+    private int commentsCount = 0;
 
     private string? errorMessage;
 
@@ -175,7 +211,7 @@ else
         {
             User? user = await sessionStorage.GetItemAsync<User>("userData");
 
-            if(user != null)
+            if (user != null)
             {
                 username = user.Username;
             }
@@ -227,7 +263,8 @@ else
         {
             await Task.Run(() => postService.AddPostUpvote(post.PostId));
             StateHasChanged();
-        } else
+        }
+        else
         {
             Navigate.NavigateTo("/login");
         }
@@ -241,22 +278,27 @@ else
         {
             await Task.Run(() => postService.AddPostDownvote(post.PostId));
             StateHasChanged();
-        } else
+        }
+        else
         {
             Navigate.NavigateTo("/login");
         }
     }
 
-    private async void CommentPost(Post post)
+    private void ToggleCommentField(int postId)
     {
-        User? user = await sessionStorage.GetItemAsync<User>("userData");
-
-        if (user != null)
+        if (postsWithCommentsToggled.Contains(postId))
         {
-            Console.WriteLine("Comment on post!");
-        } else
-        {
-            Navigate.NavigateTo("/login");
+            postsWithCommentsToggled.Remove(postId);
         }
+        else
+        {
+            postsWithCommentsToggled.Add(postId);
+        }
+    }
+
+    private bool IsCommentFieldVisible(int postId)
+    {
+        return postsWithCommentsToggled.Contains(postId);
     }
 }
