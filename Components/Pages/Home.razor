@@ -9,6 +9,7 @@
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
+
 @if (username != null)
 {
     <button @onclick="Logout" class="btn btn-primary" style="float: left;">Logout</button>
@@ -42,6 +43,13 @@ else
 
                 <div class="post">
                     <p style="margin-left: 5px;">@post.PostData</p>
+                </div>
+
+                <div class="tags-container">
+                @foreach (var tag in post.PostTags)
+                {
+                        <span class="badge tag" style="background-color: #1C6EC2;">#@tag.TagName</span>
+                }
                 </div>
 
                 <div class="footer">
@@ -136,6 +144,16 @@ else
     .dashboard-post .footer .icon-thumbsdown:hover {
         color: red;
         cursor: pointer;
+    }
+
+    .tags-container {
+        width: 85%;
+        display: flex; /* Use flexbox layout */
+        flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
+    }
+
+    .tags-container .tag {
+        margin-right: 1%;
     }
 
     .hover-span:hover {

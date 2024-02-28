@@ -11,8 +11,8 @@ namespace OPC5_BlogApp.Data.Models
         public string PostData { get; set; }
         public int PostUpvotes { get; set; }
         public int PostDownvotes { get; set; }
-        public Tag[]? PostTags { get; set; }
-        public Comment[]? PostComments { get; set; }
+        public List<Tag>? PostTags { get; set; }
+        public List<Comment>? PostComments { get; set; }
 
         public int UserId { get; set; }
         public User User { get; set; }
