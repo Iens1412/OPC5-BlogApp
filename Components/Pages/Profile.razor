@@ -10,7 +10,7 @@
 @if (username != null)
 {
     <button @onclick="Logout" class="btn btn-primary" style="float: left;">Logout</button>
-    <p style="margin-left: 4%; margin-top: 0.4%;">Logged in as <span>@username.Username</span><span @onclick='() => Navigate.NavigateTo("/")' class="hover-span" style="color: white;">Back to Home</span></p>
+    <p style="margin-left: 4%; margin-top: 0.4%;">Logged in as <span>@username.Username</span><span @onclick='() => Navigate.NavigateTo("/")' class="hover-span" style="color: white; margin-left: 1%;">Back to Home</span></p>
 }
 @if (username != null)
 {
