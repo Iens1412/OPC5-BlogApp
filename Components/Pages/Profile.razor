@@ -14,7 +14,7 @@
 }
 @if (username != null)
 {
-    <div class="profile-container">
+    <div class="profileinfo-container">
         <h3>Profile Page</h3>
 
         @if (updateMessage != null)
@@ -33,7 +33,7 @@
                 <label for="passwordInput">New Password</label>
                 <input type="password" class="form-control" autocomplete="on" @bind="newPassword" id="passwordInput" placeholder="Enter New Password" required="required" />
             </div>
-            <button type="submit" class="btn btn-primary">Update Profile</button>
+            <button type="submit" class="btn btn-primary" style="margin-top: 5%;">Update Profile</button>
         </form>
     </div>
 }
