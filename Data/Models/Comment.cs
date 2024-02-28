@@ -11,5 +11,8 @@ namespace OPC5_BlogApp.Data.Models
         [Required]
         public User CommentUser { get; set; }
         public string CommentText { get; set; }
+
+        public int CommentUserUserId { get; set; }
+        public int PostId { get; set; }
     }
 }

@@ -4,8 +4,10 @@ namespace Services.Posts
 {
     public interface ICommentService
     {
-        void AddComment(Comment comment);
+        Task AddComment(Comment comment);
 
         List<Comment> GetComments();
+
+        Task<int> GetCommentsCount(int postId);
     }
 }
