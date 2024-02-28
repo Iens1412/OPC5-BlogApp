@@ -18,6 +18,9 @@
     [Parameter]
     public int PostId { get; set; }
 
+    [Parameter]
+    public EventCallback ReloadPosts { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         postId = PostId;
@@ -69,6 +72,8 @@
 
             // Refresh comments list
             comments = await GetPostComments(postId);
+
+            await ReloadPosts.InvokeAsync();
         }
         else
         {

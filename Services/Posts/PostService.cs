@@ -48,7 +48,7 @@ namespace Services.Posts
 
         public async Task<List<Post>> GetPosts(int count)
         {
-            return await context.Posts.Include(p => p.User)
+            return await context.Posts.Include(p => p.User).Include(p => p.PostComments)
                 .OrderByDescending(p => p.PostId)
                 .Take(count)
                 .ToListAsync();

@@ -48,7 +48,7 @@ else
                 <hr style="width: 95%; border-top: 1px solid #ccc; margin: 10px auto;" />
 
                 <div class="footer">
-                    <i @onclick="() => ToggleCommentField(post.PostId)" class="far fa-comment icon-comment" style="cursor: pointer;">0</i>
+                    <i @onclick="() => ToggleCommentField(post.PostId)" class="far fa-comment icon-comment" style="cursor: pointer;">@post.PostComments.Count</i>
                     <i @onclick="() => UpvotePost(post)" class="far fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
                     <i @onclick="() => DownvotePost(post)" class="far fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
                 </div>
@@ -57,7 +57,7 @@ else
                 {
                     <!-- Improved styling for comment component -->
                     <div class="comment-container">
-                        <CommentComponent PostId="@post.PostId" />
+                        <CommentComponent PostId="@post.PostId" ReloadPosts="@LoadPosts" />
                     </div>
                 }
 
