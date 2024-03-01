@@ -52,7 +52,7 @@ else
                     <div class="tags-container">
                         @foreach (var tag in post.PostTags)
                         {
-                            <span class="badge tag" style="background-color: #1C6EC2;">#@tag.TagName</span>
+                            <span class="badge tag" style="background-color: #1C6EC2;">@tag.TagName</span>
                         }
                     </div>
 
@@ -222,7 +222,7 @@ else
     private List<Post> AllPosts = new List<Post>();
     private List<Post> DisplayedPosts = new List<Post>();
     private List<int> postsWithCommentsToggled = new List<int>();
-    private int DisplayedPostsCount = 5;
+    private int DisplayedPostsCount = 10;
     private int TotalPostsCount = 0;
     private bool ShowCommentField = false;
     private int commentsCount = 0;

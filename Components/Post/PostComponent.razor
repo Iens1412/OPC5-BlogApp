@@ -124,6 +124,11 @@
                 }
             }
 
+            foreach (var newTag in tagsAvailable)
+            {
+                tagsAvailable[newTag.Key] = false;
+            }
+
             StateHasChanged();
 
             await ReloadPosts.InvokeAsync();
