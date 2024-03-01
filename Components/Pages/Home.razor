@@ -11,7 +11,7 @@
 
 <PageTitle>Home</PageTitle>
 
-@if (username != null)
+<!--@if (username != null)
 {
     <button @onclick="Logout" class="btn btn-primary" style="float: left;">Logout</button>
     <p style="margin-left: 4%; margin-top: 0.4%;">Logged in as <span @onclick='() => Navigate.NavigateTo("/profile")' class="hover-span" style="color: white;">@username</span></p>
@@ -20,12 +20,11 @@ else
 {
     <button @onclick='() => Navigate.NavigateTo("/login")' class="btn btn-primary" style="float: left;">Login</button>
     <p style="margin-left: 3%; margin-top: 0.4%;">Not logged in</p>
-}
+}-->
 
 <div class="dashboard">
-    <div class="dashboard-buttons-container">
-        <button class="dashboard-buttons">Home</button>
-    </div>
+    <ButtonComponent />
+
     <div class="dashboard-container">
         <!--Loop posts and display them one by one-->
         @if (DisplayedPosts == null)
@@ -84,14 +83,18 @@ else
         }
         <!--Loop posts and display them one by one-->
     </div>
-    <div class="dashboard-search-container">
-        <input class="dashboard-search" type="text" placeholder="Sök..." />
-    </div>
+
+    <SearchComponent />
 </div>
 
 <style>
     body {
         background-color: black;
+        padding-top: 0px;
+    }
+
+    .content {
+        padding-top: 0px;
     }
 
     .dashboard {
@@ -110,39 +113,10 @@ else
         width: 30%;
     }
 
-    .dashboard-search-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        margin-right: auto;
-        width: 25%;
-    }
-
-    .dashboard-search {
-        border-radius: 25px;
-        background-color: #f5f9fa;
-        padding: 10px;
-    }
-
-    .dashboard-buttons-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        margin-left: auto;
-        width: 25%;
-    }
-
-    .dashboard-buttons {
-
-    }
-
     .dashboard-post {
         font-family: Poppins;
-        border: solid 1px white;
+        border: solid 0.5px grey;
+        border-top: none;
         width: 100%;
         display: flex;
         flex-direction: column;
