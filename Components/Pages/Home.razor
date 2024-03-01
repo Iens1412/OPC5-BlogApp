@@ -21,68 +21,83 @@ else
     <button @onclick='() => Navigate.NavigateTo("/login")' class="btn btn-primary" style="float: left;">Login</button>
     <p style="margin-left: 3%; margin-top: 0.4%;">Not logged in</p>
 }
-<div class="dashboard-container">
-    <!--Loop posts and display them one by one-->
-    @if (DisplayedPosts == null)
-    {
-        <p>Loading posts...</p>
-    }
-    else
-    {
-        <PostComponent ReloadPosts="@LoadPosts" />
-        @foreach (var post in DisplayedPosts)
+
+<div class="dashboard">
+    <div class="dashboard-buttons-container">
+        <button class="dashboard-buttons">Home</button>
+    </div>
+    <div class="dashboard-container">
+        <!--Loop posts and display them one by one-->
+        @if (DisplayedPosts == null)
         {
-            <div class="dashboard-post" id="@post.PostId">
-                <div class="username">
-                    <span>
-                        @post.User.Username <span style="color: #424242;">
-                            &#64;@post.User.Username
+            <p>Loading posts...</p>
+        }
+        else
+        {
+            <PostComponent ReloadPosts="@LoadPosts" />
+            @foreach (var post in DisplayedPosts)
+            {
+                <div class="dashboard-post" id="@post.PostId">
+                    <div class="username">
+                        <span>
+                            @post.User.Username <span style="color: #424242;">
+                                &#64;@post.User.Username
+                            </span>
                         </span>
-                    </span>
-                </div>
-
-                <div class="post">
-                    <p style="margin-left: 5px; max-height: 500px; overflow: hidden;">@post.PostData</p>
-                </div>
-
-                <div class="tags-container">
-                @foreach (var tag in post.PostTags)
-                {
-                        <span class="badge tag" style="background-color: #1C6EC2;">#@tag.TagName</span>
-                }
-                </div>
-
-                <!-- Line to separate post and comment component -->
-                <hr style="width: 95%; border-top: 1px solid #ccc; margin: 10px auto;" />
-
-                <div class="footer">
-                    <i @onclick="() => ToggleCommentField(post.PostId)" class="far fa-comment icon-comment" style="cursor: pointer;"><span style="margin-left: 5px;">@post.PostComments.Count</span></i>
-                    <i @onclick="() => UpvotePost(post)" class="far fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
-                    <i @onclick="() => DownvotePost(post)" class="far fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
-                </div>
-
-                @if (IsCommentFieldVisible(post.PostId))
-                {
-                    <!-- Improved styling for comment component -->
-                    <div class="comment-container">
-                        <CommentComponent PostId="@post.PostId" ReloadPosts="@LoadPosts" />
                     </div>
-                }
 
-            </div>
-        }
+                    <div class="post">
+                        <p style="margin-left: 5px; max-height: 500px; overflow: hidden;">@post.PostData</p>
+                    </div>
 
-        @if (RemainingPostsCount > 0)
-        {
-            <button style="margin-top: 2.5%; border-radius: 20px;" class="btn btn-primary" @onclick="LoadMorePosts">Ladda Fler</button>
+                    <div class="tags-container">
+                        @foreach (var tag in post.PostTags)
+                        {
+                            <span class="badge tag" style="background-color: #1C6EC2;">#@tag.TagName</span>
+                        }
+                    </div>
+
+                    <!-- Line to separate post and comment component -->
+                    <hr style="width: 95%; border-top: 1px solid #ccc; margin: 10px auto;" />
+
+                    <div class="footer">
+                        <i @onclick="() => ToggleCommentField(post.PostId)" class="far fa-comment icon-comment" style="cursor: pointer;"><span style="margin-left: 5px;">@post.PostComments.Count</span></i>
+                        <i @onclick="() => UpvotePost(post)" class="far fa-thumbs-up icon-thumbsup"><span style="margin-left: 5px;">@post.PostUpvotes</span></i>
+                        <i @onclick="() => DownvotePost(post)" class="far fa-thumbs-down icon-thumbsdown"><span style="margin-left: 5px;">@post.PostDownvotes</span></i>
+                    </div>
+
+                    @if (IsCommentFieldVisible(post.PostId))
+                    {
+                        <!-- Improved styling for comment component -->
+                        <div class="comment-container">
+                            <CommentComponent PostId="@post.PostId" ReloadPosts="@LoadPosts" />
+                        </div>
+                    }
+
+                </div>
+            }
+
+            @if (RemainingPostsCount > 0)
+            {
+                <button style="margin-top: 2.5%; border-radius: 20px;" class="btn btn-primary" @onclick="LoadMorePosts">Ladda Fler</button>
+            }
         }
-    }
-    <!--Loop posts and display them one by one-->
+        <!--Loop posts and display them one by one-->
+    </div>
+    <div class="dashboard-search-container">
+        <input class="dashboard-search" type="text" placeholder="Sök..." />
+    </div>
 </div>
 
 <style>
     body {
         background-color: black;
+    }
+
+    .dashboard {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
     }
 
     .dashboard-container {
@@ -93,8 +108,36 @@ else
         justify-content: center;
         align-items: center;
         width: 30%;
-        margin-left: auto;
+    }
+
+    .dashboard-search-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
         margin-right: auto;
+        width: 25%;
+    }
+
+    .dashboard-search {
+        border-radius: 25px;
+        background-color: #f5f9fa;
+        padding: 10px;
+    }
+
+    .dashboard-buttons-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        margin-left: auto;
+        width: 25%;
+    }
+
+    .dashboard-buttons {
+
     }
 
     .dashboard-post {
