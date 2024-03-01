@@ -31,7 +31,7 @@
             }
         </div>
         <hr />
-        <button style="margin-top: 15px;" type="submit" class="btn btn-primary dashboard-poster-button">Gör ett inlägg</button>
+        <button style="margin-top: 15px;" type="submit" class="btn btn-primary dashboard-poster-button" disabled="@String.IsNullOrEmpty(newPost.PostData)">Gör ett inlägg</button>
     </div>
 </form>
 
