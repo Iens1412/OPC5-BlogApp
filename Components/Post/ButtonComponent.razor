@@ -14,8 +14,34 @@
               d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
         </svg>
     </a>
-    <button class="dashboard-buttons" @onclick='() => Navigation.NavigateTo("/")'>Hem</button>
-    <button class="dashboard-buttons">Hemsida</button>
+    <button class="dashboard-buttons" style="padding-left: 4%;" @onclick='() => Navigation.NavigateTo("/")'>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor"
+             strokeWidth="2">
+            <path strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+        </svg>
+        <span>Hem</span>
+    </button>
+    <button class="dashboard-buttons" style="padding-left: 4%;">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor"
+             strokeWidth="2">
+            <path strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+        </svg>
+        <span>Hemida</span>
+    </button>
 </div>
 
 <style>
@@ -27,7 +53,7 @@
 
         padding-top: 0.2%;
         margin-left: auto;
-        width: 10%;
+        width: 12.5%;
     }
 
     .dashboard-buttons {
