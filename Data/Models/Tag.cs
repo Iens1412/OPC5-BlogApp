@@ -9,5 +9,9 @@ namespace OPC5_BlogApp.Data.Models
         public int TagId { get; set; }
 
         public string TagName { get; set; }
+
+        public int PostId { get; set; }
+
+        public Post TagPost { get; set; } 
     }
 }

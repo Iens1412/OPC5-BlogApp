@@ -4,7 +4,7 @@ namespace Services.Posts
 {
     public interface IPostService
     {
-        void AddPost(Post post);
+        int? AddPost(Post post);
         Post? AddPostUpvote(int postId);
         Post? AddPostDownvote(int postId);
         Task<List<Post>> GetPosts(int count);
