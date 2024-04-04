@@ -8,10 +8,12 @@ namespace Services.Posts
     {
         private readonly ApplicationDbContext context = _context;
 
-        public void AddPost(Post post)
+        public int? AddPost(Post post)
         {
             context.Posts.Add(post);
             context.SaveChanges();
+
+            return post.PostId;
         }
 
         public Post? AddPostUpvote(int postId)
@@ -48,7 +50,9 @@ namespace Services.Posts
 
         public async Task<List<Post>> GetPosts(int count)
         {
-            return await context.Posts.Include(p => p.User).Include(p => p.PostTags).Include(p => p.PostComments)
+            return await context.Posts.Include(p => p.User)
+                .Include(p => p.PostTags)
+                .Include(p => p.PostComments)
                 .OrderByDescending(p => p.PostId)
                 .Take(count)
                 .ToListAsync();

@@ -13,5 +13,11 @@ namespace Services.Tags
 
             return allTags;
         }
+
+        public void AddTag(Tag tag)
+        {
+            context.Tag.Add(tag);
+            context.SaveChanges();
+        }
     }
 }
